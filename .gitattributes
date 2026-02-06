@@ -1,0 +1,19 @@
+# Auto-detect text files and enforce LF line endings
+* text=auto eol=lf
+
+# C# and config files
+*.cs text eol=lf
+*.csproj text eol=lf
+*.slnx text eol=lf
+*.json text eol=lf
+*.config text eol=lf
+
+# Treat common binary files as binary
+*.dll binary
+*.exe binary
+*.pdb binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
