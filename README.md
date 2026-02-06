@@ -15,22 +15,22 @@ GBFR Data Extractor is a small .NET console app that automates extracting files 
 
 ## Setup
 1. Update `appsettings.json` to point to your local paths:
-   ```json
-   {
-     "GameSettings": {
-       "DataIndexPath": "D:\\GAME\\Steam\\steamapps\\common\\Granblue Fantasy Relink\\data.i",
-       "DataFolderPath": "D:\\GAME\\Steam\\steamapps\\common\\Granblue Fantasy Relink\\data"
-     },
-     "ToolSettings": {
-       "GBFRDataToolsPath": "E:\\repo\\yy556023\\GitHub\\gbfrelink-powerup\\GBFRDataTools\\GBFRDataTools.exe"
-     }
-   }
-   ```
+```json
+{
+  "GameSettings": {
+    "DataIndexPath": "D:\\GAME\\Steam\\steamapps\\common\\Granblue Fantasy Relink\\data.i",
+    "DataFolderPath": "D:\\GAME\\Steam\\steamapps\\common\\Granblue Fantasy Relink\\data"
+  },
+  "ToolSettings": {
+    "GBFRDataToolsPath": "E:\\repo\\yy556023\\GitHub\\gbfrelink-powerup\\GBFRDataTools\\GBFRDataTools.exe"
+  }
+}
+```
 2. Prepare a `modded_filelist.txt` containing relative paths (one per line), for example:
-   ```txt
-   system/param/player/char_param.bin
-   ui/message/msg_quest_001.msg
-   ```
+```txt
+system/param/player/char_param.bin
+ui/message/msg_quest_001.msg
+```
 
 ## Usage
 Build:
