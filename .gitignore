@@ -1,6 +1,7 @@
 # Build artifacts
 bin/
 obj/
+GBFRDataExtrator/
 
 # User-specific files
 *.user

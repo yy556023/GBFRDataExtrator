@@ -29,6 +29,8 @@ public class Program
         string? inputPath = GetInputPath();
         if (inputPath == null)
         {
+            Console.WriteLine("Press any key to exit...");
+            Console.ReadKey();
             return;
         }
 
@@ -38,6 +40,8 @@ public class Program
         // Validate paths
         if (!ValidatePaths(paths))
         {
+            Console.WriteLine("Press any key to exit...");
+            Console.ReadKey();
             return;
         }
 
@@ -213,15 +217,18 @@ public class Program
         {
             Console.WriteLine($"Processing: {relativePath}");
 
-            bool success = ProcessSingleFile(relativePath, paths);
+            var result = ProcessSingleFile(relativePath, paths);
 
-            if (success)
+            switch (result)
             {
-                successCount++;
-            }
-            else
-            {
-                failCount++;
+                case ProcessFileResult.Success:
+                    successCount++;
+                    break;
+                case ProcessFileResult.Failed:
+                    failCount++;
+                    break;
+                default:
+                    break;
             }
 
             Console.WriteLine();
@@ -233,7 +240,7 @@ public class Program
     /// <summary>
     /// Process single file: extract and copy
     /// </summary>
-    private static bool ProcessSingleFile(string relativePath, PathConfig paths)
+    private static ProcessFileResult ProcessSingleFile(string relativePath, PathConfig paths)
     {
         try
         {
@@ -245,27 +252,27 @@ public class Program
             if (ShouldSkipFile(targetFilePath))
             {
                 Console.WriteLine($"  Skipped: File or converted file already exists");
-                return true; // Consider as success since file already exists
+                return ProcessFileResult.Skipped;
             }
 
             // Execute extraction
             if (!ExtractFile(relativePath, paths))
             {
-                return false;
+                return ProcessFileResult.Failed;
             }
 
             // Copy file
             if (!CopyExtractedFile(relativePath, paths))
             {
-                return false;
+                return ProcessFileResult.Failed;
             }
 
-            return true;
+            return ProcessFileResult.Success;
         }
         catch (Exception ex)
         {
             Console.WriteLine($"  Error: {ex.Message}");
-            return false;
+            return ProcessFileResult.Failed;
         }
     }
 
@@ -310,7 +317,7 @@ public class Program
     /// </summary>
     private static bool ExtractFile(string relativePath, PathConfig paths)
     {
-        ProcessStartInfo startInfo = new ProcessStartInfo
+        var startInfo = new ProcessStartInfo
         {
             FileName = paths.GbfrDataTools,
             Arguments = $"extract -i \"{paths.DataIndex}\" -f \"{relativePath}\"",
@@ -320,24 +327,22 @@ public class Program
             CreateNoWindow = true
         };
 
-        using (Process? process = Process.Start(startInfo))
+        using Process? process = Process.Start(startInfo);
+        if (process == null)
         {
-            if (process == null)
-            {
-                Console.WriteLine("  Extraction failed: Unable to start process");
-                return false;
-            }
+            Console.WriteLine("  Extraction failed: Unable to start process");
+            return false;
+        }
 
-            process.WaitForExit();
+        string output = process.StandardOutput.ReadToEnd();
+        string error = process.StandardError.ReadToEnd();
 
-            string output = process.StandardOutput.ReadToEnd();
-            string error = process.StandardError.ReadToEnd();
+        process.WaitForExit();
 
-            if (process.ExitCode != 0)
-            {
-                Console.WriteLine($"  Extraction failed: {error}");
-                return false;
-            }
+        if (process.ExitCode != 0)
+        {
+            Console.WriteLine($"  Extraction failed: {error}");
+            return false;
         }
 
         return true;
