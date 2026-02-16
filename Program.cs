@@ -349,9 +349,9 @@ public class Program
     }
 
     /// <summary>
-    /// Copy extracted file to target subfolder with GBFR/data prefix
+    /// Move extracted file to target subfolder with GBFR/data prefix
     /// </summary>
-    private static bool CopyExtractedFile(string relativePath, PathConfig paths)
+    private static bool MoveExtractedFile(string relativePath, PathConfig paths)
     {
         string extractedFilePath = Path.Combine(paths.DataFolder, relativePath);
 
@@ -368,7 +368,7 @@ public class Program
 
         EnsureDirectoryExists(targetDirectory);
 
-        File.Copy(extractedFilePath, targetFilePath, overwrite: true);
+        File.Move(extractedFilePath, targetFilePath, overwrite: true);
         Console.WriteLine($"  Success: Copied to {targetFilePath}");
 
         return true;
