@@ -238,7 +238,7 @@ public class Program
     }
 
     /// <summary>
-    /// Process single file: extract and copy
+    /// Process single file: extract and Move
     /// </summary>
     private static ProcessFileResult ProcessSingleFile(string relativePath, PathConfig paths)
     {
@@ -261,8 +261,8 @@ public class Program
                 return ProcessFileResult.Failed;
             }
 
-            // Copy file
-            if (!CopyExtractedFile(relativePath, paths))
+            // Move file
+            if (!MoveExtractedFile(relativePath, paths))
             {
                 return ProcessFileResult.Failed;
             }
